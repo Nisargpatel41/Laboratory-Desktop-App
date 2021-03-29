@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, Modal, Form, Row, Col } from "react-bootstrap";
 import Receipt from "../Receipt";
 import { remote } from "electron";
+const BrowserWindow = remote.BrowserWindow;
 
 const ReceiptModal = ({ open, close }) => {
   const [selectedPrinter, setSelectedPrinter] = useState("");
@@ -11,43 +12,30 @@ const ReceiptModal = ({ open, close }) => {
   console.log(printers);
 
   const onPrintClick = () => {
-    // console.log(["selectedPrinter", selectedPrinter]);
-
-    let printerName = selectedPrinter;
-    let copies = Number(numberOfCopies);
-    let widthPage = "100%";
-
-    const data = [
-      {
-        type: "text", // 'text' | 'barCode' | 'qrCode' | 'image' | 'table
-        value: <Receipt />,
-        style: `text-align:left;`,
-        css: { "font-size": "12px" },
+    // var current = document.getElementById('current');
+    var options = {
+      silent: false,
+      printBackground: false,
+      color: false,
+      margin: {
+        marginType: "printableArea",
       },
-    ];
-
-    const options = {
-      preview: false, // Preview in window or print
-      width: widthPage, //  width of content body
-      margin: "0 0 0 0", // margin of content body
-      copies: copies, // Number of copies to print
-      printerName: printerName, // printerName: string, check it at webContent.getPrinters()
-      timeOutPerLine: 400,
-      silent: true,
+      landscape: false,
+      pagesPerSheet: 1,
+      collate: false,
+      copies: 1,
+      header: "Header of the Page",
+      footer: "Footer of the Page",
     };
 
-    const d = [...data];
-    const { PosPrinter } = remote.require("electron-pos-printer");
-    if (printerName && widthPage) {
-      PosPrinter.print(d, options)
-        .then(() => {})
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      alert("Please select the printer");
-    }
-    setSelectedPrinter("");
+    let win = BrowserWindow.getFocusedWindow();
+    // let win = BrowserWindow.getAllWindows()[0];
+
+    win.webContents.print(options, (success, failureReason) => {
+      if (!success) console.log(failureReason);
+
+      console.log("Print Initiated");
+    });
   };
 
   return (

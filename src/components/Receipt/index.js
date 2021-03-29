@@ -26,7 +26,7 @@ const Receipt = ({ onClick }) => {
             <span>Received From: </span>
           </Col>
           <Col>
-            <span>Bhadreshbhai Chandubhai Bhatia</span>
+            <span>Bhadreshbhai Bhatia</span>
           </Col>
         </Row>
 
