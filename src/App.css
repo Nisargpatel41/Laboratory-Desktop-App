@@ -9,3 +9,7 @@ body {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.small {
+  font-size: 14px;
+}
