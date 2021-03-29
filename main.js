@@ -23,6 +23,7 @@ const menu = [
   },
   {
     label: "Receipts",
+    click: hello(),
   },
   {
     label: "Edit",
@@ -58,7 +59,6 @@ function createMainWindow() {
       nodeIntegration: true,
     },
   });
-  console.log("mainwidnwo");
 
   mainWindow.maximize();
 
@@ -109,6 +109,11 @@ ipcMain.on("logs:add", async (e, item) => {
     console.log(err);
   }
 });
+
+function hello() {
+  console.log("hello");
+  ipcMain.emit("testing", { data: true });
+}
 
 app.on("ready", () => {
   createMainWindow();

@@ -12,6 +12,11 @@ const BillingForm = () => {
     variant: "success",
   });
 
+  const [registerNumber, setRegisterNumber] = useState("");
+  const [date, setDate] = useState("");
+  const [fromName, setFromName] = useState("");
+  const [name, setName] = useState("");
+  const [investigations, setInvestigations] = useState("");
   const [price, setPrice] = useState("");
   const [priceInWords, setPriceInWords] = useState("");
 
@@ -21,11 +26,17 @@ const BillingForm = () => {
       currency: true,
       ignoreZeroCurrency: true,
     });
-    console.log(words);
     setPriceInWords(words);
   };
 
   const addRecord = () => {
+    console.log(["regno", registerNumber]);
+    console.log(["date", date]);
+    console.log(["fromName", fromName]);
+    console.log(["name", name]);
+    console.log(["investigations", investigations]);
+    console.log(["price", price]);
+
     showAlert("Record Added");
   };
 
@@ -59,6 +70,8 @@ const BillingForm = () => {
                 type="number"
                 placeholder="Enter Register Number"
                 min="0"
+                value={registerNumber}
+                onChange={(e) => setRegisterNumber(e.target.value)}
               />
             </Col>
           </Form.Group>
@@ -69,20 +82,46 @@ const BillingForm = () => {
               Date
             </Form.Label>
             <Col sm="10">
-              <Form.Control type="date" />
+              <Form.Control
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+              />
             </Col>
           </Form.Group>
         </div>
       </div>
 
-      {/* Received From Name Row */}
+      {/* Received From Row */}
       <div>
         <Form.Group as={Row} controlId="receivedFrom">
           <Form.Label column sm="4">
-            Received From Name
+            Received From
           </Form.Label>
           <Col sm="8">
-            <Form.Control type="text" placeholder="Enter Name" />
+            <Form.Control
+              type="text"
+              placeholder="Enter Reeceived From"
+              value={fromName}
+              onChange={(e) => setFromName(e.target.value)}
+            />
+          </Col>
+        </Form.Group>
+      </div>
+
+      {/* Name Row */}
+      <div>
+        <Form.Group as={Row} controlId="name">
+          <Form.Label column sm="4">
+            Name
+          </Form.Label>
+          <Col sm="8">
+            <Form.Control
+              type="text"
+              placeholder="Enter Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </Col>
         </Form.Group>
       </div>
@@ -95,7 +134,12 @@ const BillingForm = () => {
             For Laboratory Investigation as Follows
           </Form.Label>
           <Col sm="8">
-            <Form.Control type="text" placeholder="Enter Investigations" />
+            <Form.Control
+              type="text"
+              placeholder="Enter Investigations"
+              value={investigations}
+              onChange={(e) => setInvestigations(e.target.value)}
+            />
           </Col>
         </Form.Group>
       </div>

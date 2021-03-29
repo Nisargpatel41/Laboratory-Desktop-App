@@ -1,10 +1,10 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import BillingForm from "./BillingForm/BillingForm";
-import Footer from "./Footer/Footer";
-import Header from "./Header";
+import BillingForm from "../BillingForm";
+import Footer from "../Footer";
+import Header from "../Header";
 
-const AppContainer = () => {
+const NewContainer = () => {
   return (
     <Container className="border border-dark">
       <Header />
@@ -14,4 +14,4 @@ const AppContainer = () => {
   );
 };
 
-export default AppContainer;
+export default NewContainer;
