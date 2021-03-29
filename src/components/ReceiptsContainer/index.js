@@ -15,17 +15,17 @@ const ReceiptsContainer = () => {
     <div className="p-4">
       <Row className="m-0 p-0">
         <Col xs={12}>
-          <SearchForm onClick={onReceiptClick} />
+          <SearchForm />
         </Col>
       </Row>
       <Row className="m-0 p-0">
         <Col xs={6} className="pt-3 cursor-pointer">
           <Receipt onClick={onReceiptClick} />
         </Col>
-        <Col xs={6} className="pt-3">
-          <Receipt />
+        <Col xs={6} className="pt-3 cursor-pointer">
+          <Receipt onClick={onReceiptClick} />
         </Col>
-        <Col xs={6} className="pt-3">
+        <Col xs={6} className="pt-3 cursor-pointer">
           <Receipt onClick={onReceiptClick} />
         </Col>
       </Row>
