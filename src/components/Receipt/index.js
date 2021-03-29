@@ -3,10 +3,10 @@ import { Row, Col } from "react-bootstrap";
 import Header from "../Header";
 import Footer from "../Footer";
 
-const Receipt = () => {
+const Receipt = ({ onClick }) => {
   return (
     <>
-      <div className="border border-dark px-3">
+      <div className="border border-dark px-3" onClick={onClick}>
         <Header />
         {/* Register Number and Date Row  */}
         <Row>

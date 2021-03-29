@@ -13,3 +13,12 @@ body {
 .small {
   font-size: 14px;
 }
+
+.modal-header {
+  border: none !important;
+  padding: 1rem 1rem 0 0 !important;
+}
+
+.modal-header > button {
+  outline: 0;
+}
