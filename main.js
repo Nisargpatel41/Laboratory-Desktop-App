@@ -53,7 +53,7 @@ const menu = [
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     show: false,
-    icon: `${__dirname}/assets/icons/icon.png`,
+    icon: `${__dirname}/assets/invoice-512.png`,
     minWidth: 1000,
     webPreferences: {
       nodeIntegration: true,
