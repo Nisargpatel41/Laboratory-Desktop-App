@@ -1,16 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import NewContainer from "./NewContainer";
 import ReceiptsContainer from "./ReceiptsContainer";
+import { ipcRenderer } from "electron";
 
 const App = () => {
+  const [view, setView] = useState("new");
+
+  ipcRenderer.on("menu", (event, message) => {
+    setView(message);
+  });
+
   return (
     <div className="app">
-      {/* <NewContainer /> */}
-      <ReceiptsContainer />
-
-      {/* <Button variant="primary" onClick={() => setModal(true)}>
-        Launch Modal
-      </Button> */}
+      {view === "new" ? <NewContainer /> : <ReceiptsContainer />}
     </div>
   );
 };

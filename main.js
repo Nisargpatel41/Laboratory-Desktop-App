@@ -1,8 +1,8 @@
 const path = require("path");
 const url = require("url");
-const { app, BrowserWindow, Menu, ipcMain } = require("electron");
-const Log = require("./models/Log");
+const { app, BrowserWindow, Menu, ipcMain, webContents } = require("electron");
 const connectDB = require("./config/db");
+const CashMemo = require("./models/CashMemo");
 
 connectDB();
 
@@ -20,10 +20,15 @@ if (
 const menu = [
   {
     label: "New",
+    click: function () {
+      mainWindow.webContents.send("menu", "new");
+    },
   },
   {
     label: "Receipts",
-    click: hello(),
+    click: function () {
+      mainWindow.webContents.send("menu", "receipts");
+    },
   },
   {
     label: "Edit",
@@ -34,7 +39,6 @@ const menu = [
       { role: "copy" },
       { role: "paste" },
       { role: "selectall" },
-      { role: "print" },
     ],
   },
   {
@@ -102,18 +106,14 @@ function createMainWindow() {
   mainWindow.on("closed", () => (mainWindow = null));
 }
 
-ipcMain.on("logs:add", async (e, item) => {
+//create memo
+ipcMain.on("CashMemo:add", async (e, item) => {
   try {
-    await Log.create(item);
+    await CashMemo.create(item);
   } catch (err) {
     console.log(err);
   }
 });
-
-function hello() {
-  console.log("hello");
-  ipcMain.emit("testing", { data: true });
-}
 
 app.on("ready", () => {
   createMainWindow();
