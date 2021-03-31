@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Col, Form, Button } from "react-bootstrap";
+import { ipcRenderer } from "electron";
 
-const SearchForm = () => {
+const SearchForm = ({ onClick }) => {
   const [isDate, setIsDate] = useState(true);
-  const [selectedValue, setSelectedValue] = useState("date");
+  const [selectedValue, setSelectedValue] = useState("memoDate");
   const [searchText, setSearchText] = useState("");
 
   const onSearchClick = (e) => {
     e.preventDefault();
-    console.log(["selectedValue", selectedValue]);
-    console.log(["searchText", searchText]);
+    onClick([selectedValue, searchText]);
   };
 
   const onSelectChange = (e) => {
@@ -17,7 +17,7 @@ const SearchForm = () => {
     // Prevents React from resetting its properties:
     e.persist();
     setSelectedValue(e.target.value);
-    if (e.target.value !== "date") {
+    if (e.target.value !== "memoDate") {
       setIsDate(false);
     } else {
       setIsDate(true);
@@ -39,7 +39,7 @@ const SearchForm = () => {
             value={selectedValue}
             onChange={onSelectChange}
           >
-            <option value="date">Date</option>
+            <option value="memoDate">Date</option>
             <option value="registerNumber">R.No.</option>
             <option value="name">Name</option>
           </Form.Control>

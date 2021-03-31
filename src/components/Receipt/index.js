@@ -1,22 +1,31 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
+import * as moment from "moment";
 import Header from "../Header";
 import Footer from "../Footer";
+import { ToWords } from "to-words";
 
-const Receipt = ({ onClick }) => {
+const toWords = new ToWords();
+
+const Receipt = ({ onClick, data }) => {
   return (
     <>
-      <div className="border border-dark px-3" onClick={onClick}>
+      <div
+        className="border border-dark px-3"
+        onClick={() => onClick(data?._id)}
+      >
         <Header />
         {/* Register Number and Date Row  */}
         <Row>
           <Col>
             <label>R.No:</label>
-            <span className="ml-2">1234</span>
+            <span className="ml-2">{data?.registerNumber}</span>
           </Col>
           <Col className="text-right">
             <label>Date:</label>
-            <span className="ml-2">19/03/2021</span>
+            <span className="ml-2">
+              {moment(data?.memoDate).format("DD/MM/YYYY")}
+            </span>
           </Col>
         </Row>
 
@@ -26,7 +35,7 @@ const Receipt = ({ onClick }) => {
             <span>Received From: </span>
           </Col>
           <Col>
-            <span>Bhadreshbhai Chandubhai Bhatia</span>
+            <span>{data?.receivedFrom}</span>
           </Col>
         </Row>
 
@@ -36,29 +45,34 @@ const Receipt = ({ onClick }) => {
             <span>Name: </span>
           </Col>
           <Col>
-            <span>Bhadreshbhai Chandubhai Bhatia</span>
+            <span>{data?.name}</span>
           </Col>
         </Row>
 
         {/* Investigation Row  */}
         <Row className="mt-2">
           <Col>
-            <span>For Laboratory Investigation as Follows : </span>
+            <span>For Laboratory Investigation as Follows: </span>
           </Col>
           <Col>
-            <span>Tav, Khasi, Shardi, loose motion etc.</span>
+            <span>{data?.investigations}</span>
           </Col>
         </Row>
 
         {/* Price Row  */}
         <Row className="mt-2">
           <Col>
-            <span>Rs : </span>
+            <span>Rs: </span>
           </Col>
           <Col>
             <div className="d-flex flex-column">
-              <span>1400.00</span>
-              <span className="small">One Thousand Fourteen Hundred Only.</span>
+              <span>{data?.price.toFixed(2)}</span>
+              <span className="small">
+                {toWords.convert(Number(data?.price), {
+                  currency: true,
+                  ignoreZeroCurrency: true,
+                })}
+              </span>
             </div>
           </Col>
         </Row>

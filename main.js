@@ -115,6 +115,42 @@ ipcMain.on("CashMemo:add", async (e, item) => {
   }
 });
 
+//get memos
+
+ipcMain.on("CashMemo:load", async () => {
+  try {
+    const memos = await CashMemo.find().sort({ memoDate: -1 });
+    mainWindow.webContents.send("CashMemo:get", JSON.stringify(memos));
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+//get memo
+
+ipcMain.on("CashMemo:load:id", async (e, id) => {
+  try {
+    const memo = await CashMemo.findById(id);
+    mainWindow.webContents.send("CashMemo:get:id", JSON.stringify(memo));
+  } catch (err) {
+    console.log(err);
+  }
+});
+
+// get register numbers
+
+ipcMain.on("CashMemo:load:registerNumbers", async () => {
+  try {
+    const numbers = await CashMemo.find({}).select("registerNumber");
+    mainWindow.webContents.send(
+      "CashMemo:get:registerNumbers",
+      JSON.stringify(numbers)
+    );
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 app.on("ready", () => {
   createMainWindow();
   const mainMenu = Menu.buildFromTemplate(menu);

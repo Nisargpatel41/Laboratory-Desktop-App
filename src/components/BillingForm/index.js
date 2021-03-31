@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Form, Row, Col, Button } from "react-bootstrap";
 import Alert from "react-bootstrap/Alert";
 import { ToWords } from "to-words";
@@ -7,12 +7,13 @@ import { ipcRenderer } from "electron";
 const toWords = new ToWords();
 
 const BillingForm = () => {
-  const [alert, setAlert] = useState({
+  const [alertMessage, setAlertMessage] = useState({
     show: false,
     message: "",
     variant: "success",
   });
 
+  const [registerNumbers, setRegisterNumbers] = useState([]);
   const [registerNumber, setRegisterNumber] = useState("");
   const [date, setDate] = useState("");
   const [fromName, setFromName] = useState("");
@@ -20,6 +21,16 @@ const BillingForm = () => {
   const [investigations, setInvestigations] = useState("");
   const [price, setPrice] = useState("");
   const [priceInWords, setPriceInWords] = useState("");
+
+  useEffect(() => {
+    ipcRenderer.send("CashMemo:load:registerNumbers");
+    ipcRenderer.on("CashMemo:get:registerNumbers", (e, numbers) => {
+      let numbersArray = JSON.parse(numbers).map(
+        (number) => number.registerNumber
+      );
+      setRegisterNumbers(numbersArray);
+    });
+  }, []);
 
   const onPriceChange = (price) => {
     setPrice(Number(price));
@@ -32,6 +43,10 @@ const BillingForm = () => {
 
   const addRecord = (e) => {
     e.preventDefault();
+    if (registerNumbers.includes(Number(registerNumber))) {
+      showAlert("Register number is already in use.", "danger", 5000);
+      return;
+    }
 
     let item = {
       registerNumber: Number(registerNumber),
@@ -57,14 +72,14 @@ const BillingForm = () => {
   };
 
   const showAlert = (message, variant = "success", limit = 2000) => {
-    setAlert({
+    setAlertMessage({
       show: true,
       message: message,
       variant: variant,
     });
 
     setTimeout(() => {
-      setAlert({
+      setAlertMessage({
         show: false,
         message: "",
         variant: "success",
@@ -189,7 +204,9 @@ const BillingForm = () => {
           </Button>
         </div>
       </Form>
-      {alert.show && <Alert variant={alert.variant}>{alert.message}</Alert>}
+      {alertMessage.show && (
+        <Alert variant={alertMessage.variant}>{alertMessage.message}</Alert>
+      )}
     </>
   );
 };
