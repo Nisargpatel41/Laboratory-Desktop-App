@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import Receipt from "../Receipt";
 import SearchForm from "./SearchForm";
 import { ipcRenderer } from "electron";
@@ -8,6 +8,7 @@ import * as moment from "moment";
 const ReceiptsContainer = () => {
   let [receiptsData, setReceiptsData] = useState([]);
   let [filterReceiptsData, setFilterReceiptsData] = useState([]);
+  let [singleReceiptOpen, setSingleReceiptOpen] = useState(false);
 
   useEffect(() => {
     ipcRenderer.send("CashMemo:load");
@@ -19,7 +20,10 @@ const ReceiptsContainer = () => {
   });
 
   const onReceiptClick = (id) => {
-    console.log(id);
+    setSingleReceiptOpen(true);
+    let result = receiptsData.filter((receipt) => receipt._id === id);
+    setFilterReceiptsData(result);
+    // console.log(id);
   };
 
   const onSearchClick = (filterCriteria) => {
@@ -45,17 +49,30 @@ const ReceiptsContainer = () => {
     setFilterReceiptsData(result);
   };
 
+  const onBackClick = () => {
+    setSingleReceiptOpen(false);
+    setFilterReceiptsData(receiptsData);
+  };
+
   return (
     <div className="p-4">
       <Row className="m-0 p-0">
         <Col xs={12}>
-          <SearchForm onClick={onSearchClick} />
+          {!singleReceiptOpen ? (
+            <SearchForm onClick={onSearchClick} />
+          ) : (
+            <Button onClick={() => onBackClick()}>Back</Button>
+          )}
         </Col>
       </Row>
       <Row className="m-0 p-0">
         {filterReceiptsData.length > 0 ? (
           filterReceiptsData.map((receipt, i) => (
-            <Col xs={6} key={i} className="pt-3 cursor-pointer">
+            <Col
+              xs={singleReceiptOpen ? 12 : 6}
+              key={i}
+              className="pt-3 cursor-pointer"
+            >
               <Receipt onClick={onReceiptClick} data={receipt} />
             </Col>
           ))
