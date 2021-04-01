@@ -9,6 +9,7 @@ const ReceiptsContainer = () => {
   let [receiptsData, setReceiptsData] = useState([]);
   let [filterReceiptsData, setFilterReceiptsData] = useState([]);
   let [singleReceiptOpen, setSingleReceiptOpen] = useState(false);
+  let [printOpen, setPrintOpen] = useState(false);
 
   useEffect(() => {
     ipcRenderer.send("CashMemo:load");
@@ -54,6 +55,11 @@ const ReceiptsContainer = () => {
     setFilterReceiptsData(receiptsData);
   };
 
+  const onPrintClick = () => {
+    console.log("print");
+    setPrintOpen(true);
+  };
+
   return (
     <div className="p-4">
       <Row className="m-0 p-0">
@@ -61,11 +67,24 @@ const ReceiptsContainer = () => {
           {!singleReceiptOpen ? (
             <SearchForm onClick={onSearchClick} />
           ) : (
-            <Button onClick={() => onBackClick()}>Back</Button>
+            !printOpen && (
+              <>
+                <Button variant="danger" onClick={() => onBackClick()}>
+                  Cancel
+                </Button>
+                <Button className="ml-2" onClick={() => onPrintClick()}>
+                  Print
+                </Button>
+              </>
+            )
           )}
         </Col>
       </Row>
-      <Row className="m-0 p-0">
+      <Row
+        className={`${
+          singleReceiptOpen ? "single-receipt " : "p-0 "
+        } m-0 cursor-pointer`}
+      >
         {filterReceiptsData.length > 0 ? (
           filterReceiptsData.map((receipt, i) => (
             <Col
@@ -77,7 +96,11 @@ const ReceiptsContainer = () => {
             </Col>
           ))
         ) : (
-          <p>No Records Found</p>
+          <Row className="m-0 p-0">
+            <Col>
+              <span>No Records Found</span>
+            </Col>
+          </Row>
         )}
       </Row>
     </div>

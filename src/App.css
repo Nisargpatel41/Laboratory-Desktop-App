@@ -22,3 +22,7 @@ body {
 .modal-header > button {
   outline: 0;
 }
+
+.single-receipt {
+  padding: 0 300px;
+}
