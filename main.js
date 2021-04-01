@@ -1,6 +1,6 @@
 const path = require("path");
 const url = require("url");
-const { app, BrowserWindow, Menu, ipcMain, webContents } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain } = require("electron");
 const connectDB = require("./config/db");
 const CashMemo = require("./models/CashMemo");
 

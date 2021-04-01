@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import Receipt from "../Receipt";
 import SearchForm from "./SearchForm";
-import { ipcRenderer } from "electron";
+import { ipcRenderer, remote } from "electron";
 import * as moment from "moment";
+const BrowserWindow = remote.BrowserWindow;
 
 const ReceiptsContainer = () => {
   let [receiptsData, setReceiptsData] = useState([]);
@@ -56,8 +57,30 @@ const ReceiptsContainer = () => {
   };
 
   const onPrintClick = () => {
-    console.log("print");
     setPrintOpen(true);
+
+    var options = {
+      silent: false,
+      printBackground: false,
+      color: false,
+      margin: {
+        marginType: "custom",
+        top: "0px",
+        bottom: "0px",
+        left: "0px",
+        right: "0px",
+      },
+      copies: 1,
+      pageSize: "A4",
+    };
+
+    let win = BrowserWindow.getFocusedWindow();
+    // let win = BrowserWindow.getAllWindows()[0];
+
+    win.webContents.print(options, (success, failureReason) => {
+      setPrintOpen(false);
+      if (!success) console.log(failureReason);
+    });
   };
 
   return (
@@ -82,15 +105,15 @@ const ReceiptsContainer = () => {
       </Row>
       <Row
         className={`${
-          singleReceiptOpen ? "single-receipt " : "p-0 "
-        } m-0 cursor-pointer`}
+          singleReceiptOpen ? "single-receipt " : "p-0  cursor-pointer "
+        } m-0`}
       >
         {filterReceiptsData.length > 0 ? (
           filterReceiptsData.map((receipt, i) => (
             <Col
               xs={singleReceiptOpen ? 12 : 6}
               key={i}
-              className="pt-3 cursor-pointer"
+              className={`pt-3 ${singleReceiptOpen ? "" : "cursor-pointer"}`}
             >
               <Receipt onClick={onReceiptClick} data={receipt} />
             </Col>
