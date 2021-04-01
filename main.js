@@ -48,10 +48,11 @@ const menu = [
     },
     accelerator: "Alt + F4",
   },
-  {
-    label: "Developer",
-    submenu: [{ role: "reload" }, { role: "toggledevtools" }],
-  },
+  // uncomment it in developement
+  // {
+  //   label: "Developer",
+  //   submenu: [{ role: "reload" }, { role: "toggledevtools" }],
+  // },
 ];
 
 function createMainWindow() {
