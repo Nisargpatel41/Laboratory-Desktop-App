@@ -2,14 +2,20 @@ import React, { useState } from "react";
 import { Col, Form, Button } from "react-bootstrap";
 import { ipcRenderer } from "electron";
 
-const SearchForm = ({ onClick }) => {
+const SearchForm = ({ onSearchClick, onResetClick }) => {
   const [isDate, setIsDate] = useState(true);
   const [selectedValue, setSelectedValue] = useState("memoDate");
   const [searchText, setSearchText] = useState("");
 
-  const onSearchClick = (e) => {
+  const onSearch = (e) => {
     e.preventDefault();
-    onClick([selectedValue, searchText]);
+    onSearchClick([selectedValue, searchText]);
+  };
+
+  const onReset = (e) => {
+    e.preventDefault();
+    setSearchText("");
+    onResetClick();
   };
 
   const onSelectChange = (e) => {
@@ -25,7 +31,7 @@ const SearchForm = ({ onClick }) => {
   };
 
   return (
-    <Form onSubmit={onSearchClick} className="w-100">
+    <Form onSubmit={onSearch} className="w-100">
       <Form.Row className="align-items-center">
         <Col xs={1}>
           <Form.Label htmlFor="selectSearchType" srOnly>
@@ -60,9 +66,17 @@ const SearchForm = ({ onClick }) => {
           />
         </Col>
 
-        <Col xs={1}>
+        <Col xs={3}>
           <Button type="submit" className="mb-2">
             Search
+          </Button>
+          <Button
+            type="button"
+            variant="success"
+            onClick={onReset}
+            className="mb-2 ml-2"
+          >
+            Reset
           </Button>
         </Col>
       </Form.Row>

@@ -51,6 +51,10 @@ const ReceiptsContainer = () => {
     setFilterReceiptsData(result);
   };
 
+  const onResetClick = () => {
+    setFilterReceiptsData(receiptsData);
+  };
+
   const onBackClick = () => {
     setSingleReceiptOpen(false);
     setFilterReceiptsData(receiptsData);
@@ -65,11 +69,12 @@ const ReceiptsContainer = () => {
       color: false,
       margin: {
         marginType: "custom",
-        top: "0px",
-        bottom: "0px",
-        left: "0px",
-        right: "0px",
+        top: "0",
+        bottom: "0",
+        left: "1",
+        right: "1",
       },
+      collate: false,
       copies: 1,
       pageSize: "A4",
     };
@@ -88,7 +93,10 @@ const ReceiptsContainer = () => {
       <Row className="m-0 p-0">
         <Col xs={12}>
           {!singleReceiptOpen ? (
-            <SearchForm onClick={onSearchClick} />
+            <SearchForm
+              onSearchClick={onSearchClick}
+              onResetClick={onResetClick}
+            />
           ) : (
             !printOpen && (
               <>

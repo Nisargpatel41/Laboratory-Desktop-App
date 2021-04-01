@@ -24,6 +24,16 @@ body {
 }
 
 .single-receipt {
-  /* padding: 0 22%; */
-  padding: 0 15%;
+  padding: 0 20%;
+  /* padding: 0 15%; */
 }
+
+/* prevents electron's additional margins around sheet-content (the first printedPage of: the html already sized 8.5x22) */
+@page {
+  margin-top: 0cm;
+  margin-left: -5cm;
+  margin-right: -5cm;
+  font-size: 2.5em;
+  /* margin-bottom: -0.5cm; */
+}
+/* prevents electron from printing a blank page between each sheet (the first and second printedPages of the tall html) */

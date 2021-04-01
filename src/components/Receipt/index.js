@@ -67,7 +67,7 @@ const Receipt = ({ onClick, data }) => {
           <Col>
             <div className="d-flex flex-column">
               <span>{data?.price.toFixed(2)}</span>
-              <span className="small">
+              <span className="">
                 {toWords.convert(Number(data?.price), {
                   currency: true,
                   ignoreZeroCurrency: true,
