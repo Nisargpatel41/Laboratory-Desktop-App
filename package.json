@@ -22,6 +22,7 @@
   "dependencies": {
     "bootstrap": "^4.6.0",
     "electron-pos-printer": "^1.2.4",
+    "moment": "^2.29.1",
     "mongoose": "^5.12.2",
     "react": "^16.13.1",
     "react-bootstrap": "^1.5.2",
