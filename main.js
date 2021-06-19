@@ -1,10 +1,16 @@
 const path = require("path");
 const url = require("url");
 const { app, BrowserWindow, Menu, ipcMain } = require("electron");
-const connectDB = require("./config/db");
-const CashMemo = require("./models/CashMemo");
+// const connectDB = require("./config/db");
+// const CashMemo = require("./models/CashMemo");
+const DataStore = require("nedb");
 
-connectDB();
+const cashMemoDb = new DataStore({
+  filename: "E:/cash_memo_database/cash-memo.db",
+  autoload: true,
+});
+
+// connectDB();
 
 let mainWindow;
 
@@ -110,7 +116,7 @@ function createMainWindow() {
 //create memo
 ipcMain.on("CashMemo:add", async (e, item) => {
   try {
-    await CashMemo.create(item);
+    await cashMemoDb.insert(item);
   } catch (err) {
     console.log(err);
   }
@@ -119,38 +125,40 @@ ipcMain.on("CashMemo:add", async (e, item) => {
 //get memos
 
 ipcMain.on("CashMemo:load", async () => {
-  try {
-    const memos = await CashMemo.find().sort({ memoDate: -1 });
-    mainWindow.webContents.send("CashMemo:get", JSON.stringify(memos));
-  } catch (err) {
-    console.log(err);
-  }
+  await cashMemoDb.find({}, (err, doc) => {
+    if (doc) {
+      mainWindow.webContents.send("CashMemo:get", JSON.stringify(doc));
+    } else {
+      console.log(err);
+    }
+  });
 });
 
 //get memo
 
 ipcMain.on("CashMemo:load:id", async (e, id) => {
-  try {
-    const memo = await CashMemo.findById(id);
-    mainWindow.webContents.send("CashMemo:get:id", JSON.stringify(memo));
-  } catch (err) {
-    console.log(err);
-  }
+  const memo = await cashMemoDb.find({ _id: id }, (err, doc) => {
+    if (doc) {
+      mainWindow.webContents.send("CashMemo:get:id", JSON.stringify(doc));
+    } else {
+      console.log(err);
+    }
+  });
 });
 
 // get register numbers
 
-ipcMain.on("CashMemo:load:registerNumbers", async () => {
-  try {
-    const numbers = await CashMemo.find({}).select("registerNumber");
-    mainWindow.webContents.send(
-      "CashMemo:get:registerNumbers",
-      JSON.stringify(numbers)
-    );
-  } catch (err) {
-    console.log(err);
-  }
-});
+// ipcMain.on("CashMemo:load:registerNumbers", async () => {
+//   try {
+//     const numbers = await cashMemoDb.find({});
+//     mainWindow.webContents.send(
+//       "CashMemo:get:registerNumbers",
+//       JSON.stringify(numbers)
+//     );
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });
 
 app.on("ready", () => {
   createMainWindow();

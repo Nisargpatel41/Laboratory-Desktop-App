@@ -17,12 +17,13 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js --mode development",
     "build": "cross-env NODE_ENV=production webpack --config webpack.build.config.js --mode production",
     "package": "npm run build",
-    "postpackage": "electron-packager ./ --out=./release-builds"
+    "postpackage": "electron-packager ./ --out=./release-builds --platform=win32 --arch=ia32"
   },
   "dependencies": {
     "bootstrap": "^4.6.0",
     "moment": "^2.29.1",
     "mongoose": "^5.12.2",
+    "nedb": "^1.8.0",
     "react": "^16.13.1",
     "react-bootstrap": "^1.5.2",
     "react-dom": "^16.13.1",

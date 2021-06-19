@@ -23,13 +23,23 @@ const BillingForm = () => {
   const [priceInWords, setPriceInWords] = useState("");
 
   useEffect(() => {
-    ipcRenderer.send("CashMemo:load:registerNumbers");
-    ipcRenderer.on("CashMemo:get:registerNumbers", (e, numbers) => {
-      let numbersArray = JSON.parse(numbers).map(
-        (number) => number.registerNumber
-      );
+    ipcRenderer.send("CashMemo:load");
+    ipcRenderer.on("CashMemo:get", (e, numbers) => {
+      let numbersCopy = JSON.parse(numbers);
+      let numbersArray = [];
+      numbersCopy.map((number) => {
+        numbersArray.push(number.registerNumber);
+      });
       setRegisterNumbers(numbersArray);
     });
+
+    // ipcRenderer.send("CashMemo:load:registerNumbers");
+    // ipcRenderer.on("CashMemo:get:registerNumbers", (e, numbers) => {
+    //   let numbersArray = JSON.parse(numbers).map(
+    //     (number) => number.registerNumber
+    //   );
+    //   setRegisterNumbers(numbersArray);
+    // });
   }, []);
 
   const onPriceChange = (price) => {
